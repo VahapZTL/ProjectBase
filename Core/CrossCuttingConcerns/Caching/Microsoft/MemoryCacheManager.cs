@@ -43,25 +43,31 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
 
         public void RemoveByPattern(string pattern)
         {
-            var cacheEntriesCollectionDefinition = typeof(MemoryCache).GetProperty("EntriesCollection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (cacheEntriesCollectionDefinition != null)
+            dynamic cacheEntriesCollection = null;
+            var cacheEntriesFieldCollectionDefinition = typeof(MemoryCache).GetField("_coherentState", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var cacheEntriesPropertyCollectionDefinition = typeof(MemoryCache).GetProperty("EntriesCollection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (cacheEntriesFieldCollectionDefinition != null)
             {
-                var cacheEntriesCollection = cacheEntriesCollectionDefinition?.GetValue(_cache) as dynamic;
-                List<ICacheEntry> cacheCollectionValues = new List<ICacheEntry>();
+                var coherentStateValueCollection = cacheEntriesFieldCollectionDefinition.GetValue(_cache);
+                var entriesCollectionValueCollection = coherentStateValueCollection?.GetType()
+                    .GetProperty(
+                        "EntriesCollection",
+                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance
+                    );
+                cacheEntriesCollection = entriesCollectionValueCollection.GetValue(coherentStateValueCollection);
+            }
+            List<ICacheEntry> cacheCollectionValues = new List<ICacheEntry>();
+            foreach (var cacheItem in cacheEntriesCollection)
+            {
+                var cacheItemValue = cacheItem.GetType().GetProperty("Value").GetValue(cacheItem, null);
+                cacheCollectionValues.Add(cacheItemValue);
+            }
+            var regex = new Regex(pattern, RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var keysToRemove = cacheCollectionValues.Where(d => regex.IsMatch(d.Key.ToString())).Select(d => d.Key).ToList();
 
-                foreach (var cacheItem in cacheEntriesCollection)
-                {
-                    ICacheEntry cacheItemValue = cacheItem.GetType().GetProperty("Value").GetValue(cacheItem, null);
-                    cacheCollectionValues.Add(cacheItemValue);
-                }
-
-                var regex = new Regex(pattern, RegexOptions.Singleline | RegexOptions.Compiled | RegexOptions.IgnoreCase);
-                var keysToRemove = cacheCollectionValues.Where(d => regex.IsMatch(d.Key.ToString())).Select(d => d.Key).ToList();
-
-                foreach (var key in keysToRemove)
-                {
-                    _cache.Remove(key);
-                }
+            foreach (var key in keysToRemove)
+            {
+                _cache.Remove(key);
             }
         }
     }

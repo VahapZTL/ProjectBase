@@ -45,7 +45,7 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
         {
             dynamic cacheEntriesCollection = null;
             var cacheEntriesFieldCollectionDefinition = typeof(MemoryCache).GetField("_coherentState", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var cacheEntriesPropertyCollectionDefinition = typeof(MemoryCache).GetProperty("EntriesCollection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            //var cacheEntriesPropertyCollectionDefinition = typeof(MemoryCache).GetProperty("EntriesCollection", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             if (cacheEntriesFieldCollectionDefinition != null)
             {
                 var coherentStateValueCollection = cacheEntriesFieldCollectionDefinition.GetValue(_cache);

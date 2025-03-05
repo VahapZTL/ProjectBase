@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Business.Abstract
 {
-    public interface ILanguageBusiness : IBusinessBase<Language>
+    public interface ILanguageBusiness
     {
         IDataResult<Language> Get(Expression<Func<Language, bool>> filter);
     }

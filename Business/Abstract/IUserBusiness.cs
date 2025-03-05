@@ -7,7 +7,7 @@ using Core.Utilities.Results;
 
 namespace Business.Abstract
 {
-    public interface IUserBusiness : IBusinessBase<User>
+    public interface IUserBusiness
     {
         IDataResult<List<ClaimModel>> GetClaims(long UserId);
         IDataResult<User> GetByMail(string email);

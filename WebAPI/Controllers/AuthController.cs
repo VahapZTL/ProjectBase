@@ -10,10 +10,12 @@ namespace WebAPI.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthBusiness authBusiness;
+        private readonly IRolePermissionsBusiness rolePermissionsBusiness;
 
-        public AuthController(IAuthBusiness authBusiness)
+        public AuthController(IAuthBusiness authBusiness, IRolePermissionsBusiness rolePermissionsBusiness)
         {
             this.authBusiness = authBusiness;
+            this.rolePermissionsBusiness = rolePermissionsBusiness;
         }
 
         [HttpPost("Login")]
@@ -61,6 +63,26 @@ namespace WebAPI.Controllers
             if (result.Success)
                 return Ok(result);
             else 
+                return BadRequest(result.Message);
+        }
+
+        [HttpGet("GetRoles")]
+        public IActionResult GetRoles(long roleType)
+        {
+            var result = rolePermissionsBusiness.GetAllRoles(roleType);
+            if (result.Success)
+                return Ok(result);
+            else
+                return BadRequest(result.Message);
+        }
+
+        [HttpPost("SetRoles")]
+        public IActionResult SetRoles(RequestSetRoles request)
+        {
+            var result = rolePermissionsBusiness.AddRoleData(request);
+            if (result.Success)
+                return Ok(result);
+            else
                 return BadRequest(result.Message);
         }
     }

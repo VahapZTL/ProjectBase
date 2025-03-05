@@ -11,45 +11,45 @@ namespace Business.Concrete
 {
     public class RolePermissionsMatchBusiness : IRolePermissionsMatchBusiness
     {
-        private IRolePermissionsMatchDal rolePermissionsMatchDal;
+        private IRolePermissionsMatchRepository rolePermissionsMatchRepository;
 
-        public RolePermissionsMatchBusiness(IRolePermissionsMatchDal rolePermissionsMatchDal)
+        public RolePermissionsMatchBusiness(IRolePermissionsMatchRepository rolePermissionsMatchRepository)
         {
-            this.rolePermissionsMatchDal = rolePermissionsMatchDal;
+            this.rolePermissionsMatchRepository = rolePermissionsMatchRepository;
         }
 
         public IResult Add(RolePermissionsMatch entity)
         {
-            return rolePermissionsMatchDal.Add(entity);
+            return rolePermissionsMatchRepository.Add(entity);
         }
 
         public IResult Delete(RolePermissionsMatch entity)
         {
-            return rolePermissionsMatchDal.Delete(entity);
+            return rolePermissionsMatchRepository.Delete(entity);
         }
 
         public IDataResult<RolePermissionsMatch> GetById(long id)
         {
-            return rolePermissionsMatchDal.Get(x => x.Id == id);
+            return rolePermissionsMatchRepository.Get(x => x.Id == id);
         }
 
         public IDataResult<List<RolePermissionsMatch>> GetList()
         {
-            return rolePermissionsMatchDal.GetList();
+            return rolePermissionsMatchRepository.GetList();
         }
 
         public IDataResult<List<RolePermissionsMatch>> GetList(Expression<Func<RolePermissionsMatch, bool>> filter)
         {
-            return rolePermissionsMatchDal.GetList(filter);
+            return rolePermissionsMatchRepository.GetList(filter);
         }
 
         public IDataResult<List<AuthorizationModel>> GetMenuList(long UserTypeId, long langId)
         {
             var authModel = new List<AuthorizationModel>();
 
-            var rolePermissionsMatchList = rolePermissionsMatchDal.GetList(x => x.UserTypeId == UserTypeId)?.Data?.Select(x => x.RolePermissionsId);
+            var rolePermissionsMatchList = rolePermissionsMatchRepository.GetList(x => x.UserTypeId == UserTypeId)?.Data?.Select(x => x.RolePermissionsId);
 
-            using (var context = new AvukatPortalContext())
+            using (var context = new ProjectBaseContext())
             {
                 var responseFromDb = from rm in context.RolePermissionsMatch
                            join rl in context.RolePermissions
@@ -134,7 +134,7 @@ namespace Business.Concrete
 
         public IResult Update(RolePermissionsMatch entity)
         {
-            return rolePermissionsMatchDal.Update(entity);
+            return rolePermissionsMatchRepository.Update(entity);
         }
     }
 }

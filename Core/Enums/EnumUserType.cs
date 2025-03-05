@@ -8,11 +8,6 @@ namespace Core.Enums
 {
     public enum EnumUserType : long
     {
-        SystemAdministrator = 1,
-        LawyerAdministrator,
-        Lawyer,
-        InternLawyer,
-        Client,
-        Customer
+        SystemAdministrator = 1
     }
 }

@@ -5,7 +5,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfLanguageDal : EfEntityRepositoryBase<Language, AvukatPortalContext>, ILanguageDal
+    public class UserTypeRepository : EntityRepositoryBase<UserType, ProjectBaseContext>, IUserTypeRepository
     {
     }
 }

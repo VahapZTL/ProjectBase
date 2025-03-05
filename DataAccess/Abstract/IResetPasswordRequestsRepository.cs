@@ -3,7 +3,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Abstract
 {
-    public interface IResetPasswordRequestsDal : IEntityRepository<ResetPasswordRequests>
+    public interface IResetPasswordRequestsRepository : IEntityRepository<ResetPasswordRequests>
     {
     }
 }

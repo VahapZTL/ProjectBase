@@ -5,7 +5,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfDescriptionDal : EfEntityRepositoryBase<Description, AvukatPortalContext>, IDescriptionDal
+    public class RolePermissionsMatchRepository : EntityRepositoryBase<RolePermissionsMatch, ProjectBaseContext>, IRolePermissionsMatchRepository
     {
     }
 }

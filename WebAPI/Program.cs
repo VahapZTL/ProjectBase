@@ -8,19 +8,43 @@ using Core.Utilities.Security.Encyption;
 using Core.Utilities.Security.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using NLog.Extensions.Logging;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddLogging(log =>
+{
+    log.AddNLog();
+});
+
+// Add Businesss to the container.
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
-            .ConfigureContainer<ContainerBuilder>(b =>
-            {
-                b.RegisterModule(new AutofacBusinessModule());
-            });
+    .ConfigureContainer<ContainerBuilder>(b =>
+    {
+        b.RegisterModule(new AutofacBusinessModule());
+    })
+    .ConfigureAppConfiguration((hostingContext, config) =>
+    {
+        config.SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly()!.Location));
+        config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+    })
+    .ConfigureLogging((hostingContext, logger) =>
+    {
+        logger.ClearProviders();
+        logger.SetMinimumLevel(LogLevel.Information);
+        NLog.LogManager.Configuration = new NLogLoggingConfiguration(hostingContext.Configuration.GetSection("NLog"));
+    });
+
 builder.Services.AddControllers();
 builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("AllowOrigin", builder => builder.WithOrigins("http://localhost:3000"));
+    opt.AddPolicy("AllowAll",
+            builder => builder.AllowAnyOrigin()
+                                .AllowAnyHeader()
+                                .AllowAnyMethod());
 });
 
 builder.Services.AddControllers().AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = null);

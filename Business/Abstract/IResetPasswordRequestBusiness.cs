@@ -3,7 +3,7 @@ using Entities.Concrete;
 
 namespace Business.Abstract
 {
-    public interface IResetPasswordRequestBusiness : IBusinessBase<ResetPasswordRequests>
+    public interface IResetPasswordRequestBusiness
     {
     }
 }

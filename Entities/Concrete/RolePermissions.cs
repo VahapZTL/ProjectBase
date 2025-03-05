@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Entities.Concrete
 {
     [Table("RolePermissions", Schema = "auth")]
-    public class RolePermissions : IEntity
+    public class RolePermissions : object, IEntity
     {
         [Key]
         public long Id { get; set; }
@@ -14,11 +14,11 @@ namespace Entities.Concrete
 
         public string Name { get; set; }
 
-        public string MenuIconClass { get; set; }
+        public string? MenuIconClass { get; set; }
 
-        public string ControllerName { get; set; }
+        public string? ControllerName { get; set; }
 
-        public string ActionName { get; set; }
+        public string? ActionName { get; set; }
 
         public long? ParentRoleId { get; set; }
 

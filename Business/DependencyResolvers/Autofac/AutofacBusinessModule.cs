@@ -3,6 +3,7 @@ using Autofac.Extras.DynamicProxy;
 using Business.Abstract;
 using Business.Concrete;
 using Castle.DynamicProxy;
+using Core.Aspects.Autofac.Caching;
 using Core.Utilities.Interceptors;
 using Core.Utilities.Security.Jwt;
 using DataAccess.Abstract;
@@ -15,34 +16,34 @@ namespace Business.DependencyResolvers.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<ProductBusiness>().As<IProductBusiness>();
-            builder.RegisterType<EfProductDal>().As<IProductDal>();
+            builder.RegisterType<ProductRepository>().As<IProductRepository>();
 
             builder.RegisterType<CategoryBusiness>().As<ICategoryBusiness>();
-            builder.RegisterType<EfCategoryDal>().As<ICategoryDal>();
+            builder.RegisterType<CategoryRepository>().As<ICategoryRepository>();
 
             builder.RegisterType<UserBusiness>().As<IUserBusiness>();
-            builder.RegisterType<EfUserDal>().As<IUserDal>();
+            builder.RegisterType<UserRepository>().As<IUserRepository>();
 
             builder.RegisterType<DescriptionBusiness>().As<IDescriptionBusiness>(); 
-            builder.RegisterType<EfDescriptionDal>().As<IDescriptionDal>();
+            builder.RegisterType<DescriptionRepository>().As<IDescriptionRepository>();
 
             builder.RegisterType<LanguageBusiness>().As<ILanguageBusiness>();
-            builder.RegisterType<EfLanguageDal>().As<ILanguageDal>();
+            builder.RegisterType<LanguageRepository>().As<ILanguageRepository>();
 
             builder.RegisterType<ResetPasswordRequestBusiness>().As<IResetPasswordRequestBusiness>();
-            builder.RegisterType<EfResetPasswordRequestsDal>().As<IResetPasswordRequestsDal>();
+            builder.RegisterType<ResetPasswordRequestsRepository>().As<IResetPasswordRequestsRepository>();
 
-            builder.RegisterType<RolePermissionsBusiness>().As<IRolePermissionsBusiness>();
-            builder.RegisterType<EfRolePermissionsDal>().As<IRolePermissionsDal>();
+            builder.RegisterType<RolePermissionsBusiness>().As<IRolePermissionsBusiness>().EnableInterfaceInterceptors().EnableClassInterceptors();
+            builder.RegisterType<RolePermissionsRepository>().As<IRolePermissionsRepository>();
 
             builder.RegisterType<RolePermissionsMatchBusiness>().As<IRolePermissionsMatchBusiness>();
-            builder.RegisterType<EfRolePermissionsMatchDal>().As<IRolePermissionsMatchDal>();
+            builder.RegisterType<RolePermissionsMatchRepository>().As<IRolePermissionsMatchRepository>();
 
             builder.RegisterType<RolePermissionsTypeBusiness>().As<IRolePermissionsTypeBusiness>();
-            builder.RegisterType<EfRolePermissionsTypeDal>().As<IRolePermissionsTypeDal>();
+            builder.RegisterType<RolePermissionsTypeRepository>().As<IRolePermissionsTypeRepository>();
 
             builder.RegisterType<UserTypeBusiness>().As<IUserTypeBusiness>();
-            builder.RegisterType<EfUserTypeDal>().As<IUserTypeDal>();
+            builder.RegisterType<UserTypeRepository>().As<IUserTypeRepository>();
 
             builder.RegisterType<AuthBusiness>().As<IAuthBusiness>();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>();
@@ -54,7 +55,6 @@ namespace Business.DependencyResolvers.Autofac
                 {
                     Selector = new AspectInterceptorSelector()
                 }).SingleInstance();
-
         }
     }
 }

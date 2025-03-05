@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Core.Utilities.Results
 {
-    public class Result:IResult
+    public class Result : object, IResult
     {
         public Result(bool success, string message):this(success)
         {
@@ -15,7 +15,7 @@ namespace Core.Utilities.Results
         {
             Success = success;
         }
-        public bool Success { get; }
-        public string Message { get; }
+        public bool Success { get; set; }
+        public string Message { get; set; }
     }
 }

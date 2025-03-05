@@ -4,7 +4,7 @@ using Core.Entities.Dtos.Models;
 
 namespace DataAccess.Abstract
 {
-    public interface IUserDal : IEntityRepository<User>
+    public interface IUserRepository : IEntityRepository<User>
     {
         List<ClaimModel> GetClaims(long UserId);
     }

@@ -5,7 +5,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfUserTypeDal : EfEntityRepositoryBase<UserType, AvukatPortalContext>, IUserTypeDal
+    public class RolePermissionsRepository : EntityRepositoryBase<RolePermissions, ProjectBaseContext>, IRolePermissionsRepository
     {
     }
 }

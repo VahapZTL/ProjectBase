@@ -4,7 +4,7 @@ using Entities.Concrete;
 
 namespace Business.Abstract
 {
-    public interface IProductBusiness : IBusinessBase<Product>
+    public interface IProductBusiness
     {
         IDataResult<List<Product>> GetListByCategory(int categoryId);
     }

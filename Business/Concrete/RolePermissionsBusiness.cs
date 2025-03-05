@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Core.Aspects.Autofac.Caching;
+using Core.Entities.Dtos.Request;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -8,41 +10,49 @@ namespace Business.Concrete
 {
     public class RolePermissionsBusiness : IRolePermissionsBusiness
     {
-        private IRolePermissionsDal rolePermissionsDal;
+        private readonly IRolePermissionsBusiness rolePermissionsBusiness;
+        private IRolePermissionsRepository rolePermissionsRepository;
 
-        public RolePermissionsBusiness(IRolePermissionsDal rolePermissionsDal)
+        public RolePermissionsBusiness(IRolePermissionsRepository rolePermissionsRepository, IRolePermissionsBusiness rolePermissionsBusiness)
         {
-            this.rolePermissionsDal = rolePermissionsDal;
+            this.rolePermissionsRepository = rolePermissionsRepository;
+            this.rolePermissionsBusiness = rolePermissionsBusiness ?? this;
         }
 
-        public IResult Add(RolePermissions entity)
+        [CacheRemoveAspect("RolePermissionsBusiness.GetAllRoles()")]
+        public IResult AddRoleData(RequestSetRoles req)
         {
-            return rolePermissionsDal.Add(entity);
+            RolePermissions rolePermissions = new RolePermissions 
+            { 
+                ActionName = req.ActionName,
+                ControllerName = req.ControllerName,
+                MenuIconClass = req.MenuIconClass,
+                CreatedDate = DateTime.Now,
+                CreatedUserId = -1,
+                ModifiedDate = DateTime.Now,
+                ModifiedUserId = -1,
+                Name = req.Name,
+                ParentRoleId = req.ParentRoleId,
+                RolePermissionsTypeId = req.RolePermissionsTypeId,
+                RolePriority = req.RolePriority,
+                StatusId = req.StatusId
+            };
+            rolePermissionsRepository.Add(rolePermissions);
+            return new SuccessResult();
         }
 
-        public IResult Delete(RolePermissions entity)
+        public IDataResult<List<RolePermissions>> GetAllRoles(long roleType)
         {
-            return rolePermissionsDal.Delete(entity);
+            var data = rolePermissionsBusiness.GetAllRolesData(x => x.RolePermissionsTypeId == roleType);
+
+            return data;
         }
 
-        public IDataResult<RolePermissions> GetById(long id)
+        [CacheAspect]
+        public IDataResult<List<RolePermissions>> GetAllRolesData(Expression<Func<RolePermissions, bool>> filter = null)
         {
-            return rolePermissionsDal.Get(x => x.Id == id);
-        }
-
-        public IDataResult<List<RolePermissions>> GetList()
-        {
-            return rolePermissionsDal.GetList();
-        }
-
-        public IDataResult<List<RolePermissions>> GetList(Expression<Func<RolePermissions, bool>> filter)
-        {
-            return rolePermissionsDal.GetList(filter);
-        }
-
-        public IResult Update(RolePermissions entity)
-        {
-            return rolePermissionsDal.Update(entity);
+            var data =  rolePermissionsRepository.GetList(x => x.StatusId == 1);
+            return new SuccessDataResult<List<RolePermissions>>(data.Data, "Success");
         }
     }
 }

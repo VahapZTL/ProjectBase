@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.Extensions
 {
-    public class ErrorDetails : ErrorResult
+    public class ErrorDataDetails<T> : ErrorDataResult<T>
     {
         public override string ToString()
         {

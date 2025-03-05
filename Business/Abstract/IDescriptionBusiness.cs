@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace Business.Abstract
 {
-    public interface IDescriptionBusiness : IBusinessBase<Description>
+    public interface IDescriptionBusiness
     {
         IDataResult<Description> Get(Expression<Func<Description, bool>> filter);
     }

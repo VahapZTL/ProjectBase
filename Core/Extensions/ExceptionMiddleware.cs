@@ -29,27 +29,27 @@ namespace Core.Extensions
         private Task HandleExceptionAsync(HttpContext httpContext, Exception e)
         {
             httpContext.Response.ContentType = "application/json";
-            httpContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+            httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
             string message = "Internal Server Error";
             IEnumerable<ValidationFailure> errors;
 
-            if (e.GetType()==typeof(ValidationException))
+            if (e.GetType() == typeof(ValidationException))
             {
                 errors = ((ValidationException)e).Errors;
-                httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                httpContext.Response.StatusCode = (int)HttpStatusCode.OK;
 
-                return httpContext.Response.WriteAsync(new ValidationErrorDetail
+                return httpContext.Response.WriteAsync(new ErrorDataDetails<IEnumerable<ValidationFailure>>
                 {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Success = false,
                     Message = "Validation Error",
-                    Errors = errors
+                    Data = errors
                 }.ToString());
             }
 
             return httpContext.Response.WriteAsync(new ErrorDetails
             {
-                StatusCode = httpContext.Response.StatusCode,
+                Success = false,
                 Message = message
             }.ToString());
         }

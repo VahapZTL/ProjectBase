@@ -3,7 +3,7 @@ using Entities.Concrete;
 
 namespace Business.Abstract
 {
-    public interface IRolePermissionsTypeBusiness : IBusinessBase<RolePermissionsType>
+    public interface IRolePermissionsTypeBusiness
     {
     }
 }

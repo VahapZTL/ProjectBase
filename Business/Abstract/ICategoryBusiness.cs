@@ -3,7 +3,7 @@ using Entities.Concrete;
 
 namespace Business.Abstract
 {
-    public interface ICategoryBusiness : IBusinessBase<Category>
+    public interface ICategoryBusiness
     {
     }
 }

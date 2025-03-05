@@ -5,7 +5,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCategoryDal : EfEntityRepositoryBase<Category, AvukatPortalContext>, ICategoryDal
+    public class DescriptionRepository : EntityRepositoryBase<Description, ProjectBaseContext>, IDescriptionRepository
     {
     }
 }

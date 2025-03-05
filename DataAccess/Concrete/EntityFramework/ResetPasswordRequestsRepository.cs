@@ -5,7 +5,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfRolePermissionsDal : EfEntityRepositoryBase<RolePermissions, AvukatPortalContext>, IRolePermissionsDal
+    public class ResetPasswordRequestsRepository : EntityRepositoryBase<ResetPasswordRequests, ProjectBaseContext>, IResetPasswordRequestsRepository
     {
     }
 }

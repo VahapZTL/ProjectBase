@@ -3,7 +3,7 @@ using Entities.Concrete;
 
 namespace Business.Abstract
 {
-    public interface IUserTypeBusiness : IBusinessBase<UserType>
+    public interface IUserTypeBusiness
     {
     }
 }

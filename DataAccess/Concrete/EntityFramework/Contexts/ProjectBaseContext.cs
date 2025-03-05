@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace DataAccess.Concrete.EntityFramework.Contexts
 {
-    public class AvukatPortalContext : DbContext
+    public class ProjectBaseContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

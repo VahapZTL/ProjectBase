@@ -3,7 +3,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Abstract
 {
-    public interface IRolePermissionsMatchDal : IEntityRepository<RolePermissionsMatch>
+    public interface IRolePermissionsMatchRepository : IEntityRepository<RolePermissionsMatch>
     {
     }
 }

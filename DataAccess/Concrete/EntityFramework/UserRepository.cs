@@ -6,11 +6,11 @@ using DataAccess.Concrete.EntityFramework.Contexts;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfUserDal : EfEntityRepositoryBase<User, AvukatPortalContext>, IUserDal
+    public class UserRepository : EntityRepositoryBase<User, ProjectBaseContext>, IUserRepository
     {
         public List<ClaimModel> GetClaims(long UserId)
         {
-            using (var context = new AvukatPortalContext())
+            using (var context = new ProjectBaseContext())
             {
                 var result = from user in context.Users
                               join userType in context.UserType

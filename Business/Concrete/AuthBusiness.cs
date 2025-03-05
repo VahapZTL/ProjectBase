@@ -19,8 +19,8 @@ namespace Business.Concrete
         private readonly IRolePermissionsMatchBusiness rolePermissionsMatchBusiness;
 
         public AuthBusiness(
-            IUserBusiness userService, 
-            ITokenHelper tokenHelper, 
+            IUserBusiness userService,
+            ITokenHelper tokenHelper,
             IRolePermissionsMatchBusiness rolePermissionsMatchBusiness)
         {
             this.userService = userService;
@@ -32,11 +32,11 @@ namespace Business.Concrete
         {
             ResponseRegisterUser response = new ResponseRegisterUser();
             byte[] passwordHash, passwordSalt;
-            HashingHelper.CreatePasswordHash(userForRegisterDto.Password, out passwordHash,out passwordSalt);
+            HashingHelper.CreatePasswordHash(userForRegisterDto.Password, out passwordHash, out passwordSalt);
             var user = new User
             {
                 UserTypeId = userForRegisterDto.UserTypeId,
-                Address = userForRegisterDto.Address,   
+                Address = userForRegisterDto.Address,
                 PhoneNumber = userForRegisterDto.PhoneNumber,
                 ImagePath = "",
                 Email = userForRegisterDto.Email,
@@ -51,18 +51,18 @@ namespace Business.Concrete
                 ModifiedUserId = -1,
             };
 
-            var addUserResult = userService.Add(user);
+            //var addUserResult = userService.Add(user);
 
-            if (addUserResult.Success)
+            if (true)
                 return new SuccessDataResult<ResponseRegisterUser>(response, Messages.UserRegistered);
             else
-                return new ErrorDataResult<ResponseRegisterUser>(addUserResult.Message);
+                return new ErrorDataResult<ResponseRegisterUser>("");
         }
 
         public IDataResult<ResponseLoginUser> Login(RequestLoginUser userForLoginDto)
         {
             var userToCheck = userService.GetByMail(userForLoginDto.Email);
-            if (userToCheck==null)
+            if (userToCheck == null)
             {
                 return new ErrorDataResult<ResponseLoginUser>(Messages.UserNotFound);
             }
@@ -82,7 +82,7 @@ namespace Business.Concrete
                 AccessToken = CreateAccessToken(userToCheck.Data.Id, userToCheck.Data.Email, userToCheck.Data.FirstName, userToCheck.Data.LastName)
             };
 
-            return new SuccessDataResult<ResponseLoginUser>(response,Messages.SuccessfulLogin);
+            return new SuccessDataResult<ResponseLoginUser>(response, Messages.SuccessfulLogin);
         }
 
         public List<AuthorizationModel> CreateAuthorizationModel(long UserTypeId, long LangId = 1)

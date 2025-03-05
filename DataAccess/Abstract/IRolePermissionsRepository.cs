@@ -3,7 +3,7 @@ using Entities.Concrete;
 
 namespace DataAccess.Abstract
 {
-    public interface ILanguageDal : IEntityRepository<Language>
+    public interface IRolePermissionsRepository : IEntityRepository<RolePermissions>
     {
     }
 }

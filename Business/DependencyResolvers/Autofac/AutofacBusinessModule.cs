@@ -33,7 +33,7 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<ResetPasswordRequestBusiness>().As<IResetPasswordRequestBusiness>();
             builder.RegisterType<ResetPasswordRequestsRepository>().As<IResetPasswordRequestsRepository>();
 
-            builder.RegisterType<RolePermissionsBusiness>().As<IRolePermissionsBusiness>().EnableInterfaceInterceptors().EnableClassInterceptors();
+            builder.RegisterType<RolePermissionsBusiness>().As<IRolePermissionsBusiness>();
             builder.RegisterType<RolePermissionsRepository>().As<IRolePermissionsRepository>();
 
             builder.RegisterType<RolePermissionsMatchBusiness>().As<IRolePermissionsMatchBusiness>();

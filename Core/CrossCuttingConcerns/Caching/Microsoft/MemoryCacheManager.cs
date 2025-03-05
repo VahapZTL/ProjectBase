@@ -94,13 +94,26 @@ namespace Core.CrossCuttingConcerns.Caching.Microsoft
 
             try
             {
-                // Regex nesnesini önbelleğe al (Lazy ile regex sadece ihtiyaç duyulduğunda derlenecek)
-                var regex = _regexCache.GetOrAdd(pattern, p => new Lazy<Regex>(() => new Regex(p, RegexOptions.Compiled | RegexOptions.IgnoreCase))).Value;
+                IEnumerable<string> keysToRemove;
 
-                // Büyük veri kümeleri için paralel işlem
-                IEnumerable<string> keysToRemove = _cacheKeys.Count > 1000
-                    ? _cacheKeys.AsParallel().Where(key => regex.IsMatch(key)).ToList()
-                    : _cacheKeys.Where(key => regex.IsMatch(key)).ToList();
+                // Eğer pattern '*' içeriyorsa, ilgili metodun tüm cache anahtarlarını sil
+                if (pattern.Contains("*"))
+                {
+                    string basePattern = pattern.Replace("*", "").Trim(); // '*' karakterini kaldır ve boşlukları temizle
+
+                    keysToRemove = _cacheKeys.Count > 1000
+                        ? _cacheKeys.AsParallel().Where(key => key.Contains(basePattern)).ToList()
+                        : _cacheKeys.Where(key => key.Contains(basePattern)).ToList();
+                }
+                else
+                {
+                    // Normal regex işlemi
+                    var regex = _regexCache.GetOrAdd(pattern, p => new Lazy<Regex>(() => new Regex(p, RegexOptions.Compiled | RegexOptions.IgnoreCase))).Value;
+
+                    keysToRemove = _cacheKeys.Count > 1000
+                        ? _cacheKeys.AsParallel().Where(key => regex.IsMatch(key)).ToList()
+                        : _cacheKeys.Where(key => regex.IsMatch(key)).ToList();
+                }
 
                 // Thread-safe işlem
                 lock (_lock)

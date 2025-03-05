@@ -10,13 +10,11 @@ namespace Business.Concrete
 {
     public class RolePermissionsBusiness : IRolePermissionsBusiness
     {
-        private readonly IRolePermissionsBusiness rolePermissionsBusiness;
         private IRolePermissionsRepository rolePermissionsRepository;
 
-        public RolePermissionsBusiness(IRolePermissionsRepository rolePermissionsRepository, IRolePermissionsBusiness rolePermissionsBusiness)
+        public RolePermissionsBusiness(IRolePermissionsRepository rolePermissionsRepository)
         {
             this.rolePermissionsRepository = rolePermissionsRepository;
-            this.rolePermissionsBusiness = rolePermissionsBusiness ?? this;
         }
 
         [CacheRemoveAspect("RolePermissionsBusiness.GetAllRoles()")]
@@ -41,9 +39,10 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        [CacheAspect]
         public IDataResult<List<RolePermissions>> GetAllRoles(long roleType)
         {
-            var data = rolePermissionsBusiness.GetAllRolesData(x => x.RolePermissionsTypeId == roleType);
+            var data = rolePermissionsRepository.GetList(x => x.RolePermissionsTypeId == roleType);
 
             return data;
         }
